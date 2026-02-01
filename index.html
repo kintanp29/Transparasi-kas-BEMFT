@@ -97,6 +97,46 @@ nav a.active::after{width:100%}
   box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
 }
 
+/* ===== TAB NAVIGATION ===== */
+.tab-navigation {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0 1.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.tab-btn {
+  padding: 1rem 2rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-btn:hover {
+  color: #fff;
+}
+
+.tab-btn.active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 /* ===== HERO ===== */
 .hero{padding:4rem 0 2rem}
 .hero h1{
@@ -170,6 +210,175 @@ select{
 .card:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(0,0,0,.15)}
 .card span{color:var(--text-secondary);font-size:.85rem}
 .card h3{font-size:2.2rem;margin-top:.5rem;font-family:'JetBrains Mono',monospace}
+
+/* ===== MONTHLY REPORT CARD ===== */
+.monthly-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.month-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: var(--transition);
+}
+
+.month-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.month-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.month-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.month-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.stat-value.success {
+  color: var(--success);
+}
+
+.stat-value.warning {
+  color: var(--warning);
+}
+
+.month-total {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 2px solid var(--border);
+}
+
+.month-total-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.month-total-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ===== YEARLY SUMMARY ===== */
+.yearly-summary {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.yearly-summary h2 {
+  margin: 0 0 2rem 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.yearly-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.yearly-stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.yearly-stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.yearly-stat-icon.total {
+  background: var(--gradient-1);
+}
+
+.yearly-stat-icon.paid {
+  background: var(--gradient-2);
+}
+
+.yearly-stat-icon.unpaid {
+  background: var(--gradient-3);
+}
+
+.yearly-stat-icon.collected {
+  background: var(--gradient-4);
+}
+
+.yearly-stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.yearly-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+}
 
 /* ===== TABLE ===== */
 .table-wrap{
@@ -257,95 +466,45 @@ tbody tr:hover{background: var(--bg-secondary);}
 }
 
 .bayar-kas-subtitle{
-  font-size:1.2rem;
-  opacity:0.95;
-  margin:0 0 1.5rem 0;
-  font-weight:500;
-}
-
-.bayar-kas-button{
-  display:inline-flex;
-  align-items:center;
-  gap:0.8rem;
-  background:#fff;
-  color:#667eea;
-  padding:1rem 2.5rem;
-  border-radius:50px;
-  font-weight:800;
   font-size:1.1rem;
-  text-decoration:none;
-  box-shadow:0 10px 30px rgba(0,0,0,0.3);
-  transition:all 0.3s ease;
-  animation: wiggle 1.5s ease-in-out infinite;
-  border:none;
-  cursor:pointer;
-}
-
-.bayar-kas-button:hover{
-  transform:translateY(-5px) scale(1.05);
-  box-shadow:0 15px 40px rgba(0,0,0,0.4);
+  margin-bottom:2rem;
+  opacity:0.95;
+  font-weight:500;
 }
 
 .bayar-kas-stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
   gap:1.5rem;
   margin-top:2rem;
+  padding-top:2rem;
+  border-top:2px solid rgba(255,255,255,0.3);
 }
 
-.stat-item{
-  background:rgba(255,255,255,0.15);
-  backdrop-filter:blur(10px);
-  border-radius:16px;
-  padding:1.5rem;
+.stat-box{
   text-align:center;
-  border:1px solid rgba(255,255,255,0.2);
 }
 
 .stat-number{
-  font-size:2rem;
+  font-size:2.5rem;
   font-weight:900;
-  margin:0;
+  display:block;
+  margin-bottom:0.5rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
   font-family:'JetBrains Mono',monospace;
 }
 
-.stat-label{
+.stat-text{
   font-size:0.9rem;
   opacity:0.9;
-  margin:0.5rem 0 0 0;
-}
-
-/* ===== FOOTER ===== */
-footer{
-  margin-top:4rem;padding:2rem 0;
-  background:#0f172a;color:#cbd5f5
-}
-footer .container{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-footer a{color:#cbd5f5;margin-left:1rem;text-decoration:none;transition: var(--transition);}
-footer a:hover{color: #fff;}
-
-/* ===== ANIMATIONS ===== */
-@keyframes float{
-  0%,100%{transform:translateY(0px)}
-  50%{transform:translateY(-10px)}
-}
-
-@keyframes bounce{
-  0%, 100%{transform:translateY(0px) scale(1)}
-  50%{transform:translateY(-20px) scale(1.1)}
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
 @keyframes pulseGlow{
-  0%, 100%{
-    box-shadow:0 20px 50px rgba(102,126,234,0.4);
-  }
-  50%{
-    box-shadow:0 20px 60px rgba(102,126,234,0.6), 0 0 40px rgba(102,126,234,0.3);
-  }
+  0%,100%{box-shadow:0 20px 50px rgba(102,126,234,0.4)}
+  50%{box-shadow:0 25px 60px rgba(102,126,234,0.6)}
 }
 
 @keyframes rotateGlow{
@@ -353,65 +512,65 @@ footer a:hover{color: #fff;}
   100%{transform:rotate(360deg)}
 }
 
-@keyframes slideInUp{
-  from{
-    transform:translateY(30px);
-    opacity:0;
-  }
-  to{
-    transform:translateY(0);
-    opacity:1;
-  }
+@keyframes bounce{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-15px)}
 }
 
-@keyframes wiggle{
-  0%, 100%{transform:rotate(0deg)}
-  25%{transform:rotate(-3deg)}
-  75%{transform:rotate(3deg)}
+@keyframes slideInUp{
+  0%{opacity:0;transform:translateY(20px)}
+  100%{opacity:1;transform:translateY(0)}
 }
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+/* ===== FOOTER ===== */
+footer{
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(10px);
+  padding:2rem 0;
+  margin-top:4rem;
+  border-top:1px solid rgba(255,255,255,0.2)
+}
+footer .container{
+  display:flex;justify-content:space-between;align-items:center
+}
+footer p{color:#fff;margin:0}
+footer a{color:#fff;font-size:1.5rem;margin-left:1rem;transition:var(--transition)}
+footer a:hover{transform:scale(1.2)}
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .header-wrap{
+  .header-wrap {
     flex-direction: column;
     gap: 1rem;
   }
-  nav{
+  nav {
     flex-direction: column;
-    gap: 0.5rem;
+    width: 100%;
   }
-  .hero h1{
+  .hero h1 {
     font-size: 2.5rem;
   }
-  .hero p{
-    font-size: 1rem;
+  .tab-navigation {
+    flex-wrap: wrap;
   }
-  .saldo-card{
-    flex-direction: column;
-    text-align: center;
+  .tab-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
   }
-  .controls{
-    flex-direction: column;
-  }
-  .summary{
-    grid-template-columns: 1fr;
-  }
-  .bayar-kas-title{
+  .bayar-kas-title {
     font-size: 2rem;
   }
-  .bayar-kas-subtitle{
-    font-size: 1rem;
-  }
-  .bayar-kas-icon{
-    font-size: 3rem;
-  }
-  .bayar-kas-stats{
-    grid-template-columns: 1fr;
+  .stat-number {
+    font-size: 2rem;
   }
 }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -424,7 +583,7 @@ footer a:hover{color: #fff;}
       </div>
     </div>
     <nav>
-      <a href="index.html" class="active">Beranda</a>
+      <a href="#" class="active">Beranda</a>
       <a href="login.html" class="login-btn">
         <i class="fas fa-sign-in-alt"></i> Login Admin
       </a>
@@ -435,9 +594,10 @@ footer a:hover{color: #fff;}
 <main>
   <section class="hero">
     <div class="container">
-      <h1>Transparansi Keuangan BEM FT</h1>
-      <p>Sistem pengelolaan kas yang transparan dan akuntabel untuk kemajuan bersama.</p>
-      
+      <h1 style="color:#fff">Transparansi Keuangan BEM FT</h1>
+      <p style="color:#fff">Pantau kas anggota secara real-time dengan transparan dan akuntabel</p>
+
+      <!-- Saldo Card -->
       <div class="saldo-card">
         <div class="saldo-icon"><i class="fas fa-wallet"></i></div>
         <div>
@@ -448,98 +608,201 @@ footer a:hover{color: #fff;}
     </div>
   </section>
 
+  <!-- Tab Navigation -->
   <section class="container">
-    <!-- Ayo Bayar Kas Box -->
-    <div class="bayar-kas-box">
-      <div class="bayar-kas-content">
-        <div class="bayar-kas-icon">💰✨</div>
-        <h2 class="bayar-kas-title">Ayo Bayar Kas BEM FT!</h2>
-        <p class="bayar-kas-subtitle">Mari bersama membangun organisasi yang lebih baik dengan membayar kas tepat waktu</p>
-        <a href="login.html" class="bayar-kas-button">
-          <i class="fas fa-hand-holding-usd"></i>
-          Bayar Sekarang
-        </a>
-        <div class="bayar-kas-stats">
-          <div class="stat-item">
-            <h3 class="stat-number" id="stat-total">0</h3>
-            <p class="stat-label">Total Anggota</p>
-          </div>
-          <div class="stat-item">
-            <h3 class="stat-number text-success" id="stat-paid">0</h3>
-            <p class="stat-label">Sudah Bayar</p>
-          </div>
-          <div class="stat-item">
-            <h3 class="stat-number" style="color:#fbbf24" id="stat-unpaid">0</h3>
-            <p class="stat-label">Belum Bayar</p>
+    <div class="tab-navigation">
+      <button class="tab-btn active" onclick="switchTab('daftar')">
+        <i class="fas fa-users"></i> Daftar Anggota
+      </button>
+      <button class="tab-btn" onclick="switchTab('bulanan')">
+        <i class="fas fa-calendar-alt"></i> Laporan Bulanan
+      </button>
+      <button class="tab-btn" onclick="switchTab('tahunan')">
+        <i class="fas fa-chart-bar"></i> Rekapan Tahunan
+      </button>
+    </div>
+  </section>
+
+  <!-- Daftar Anggota Tab -->
+  <section id="daftar-tab" class="tab-content active">
+    <div class="container">
+      <!-- Ayo Bayar Kas Box -->
+      <div class="bayar-kas-box">
+        <div class="bayar-kas-content">
+          <div class="bayar-kas-icon">💰</div>
+          <h2 class="bayar-kas-title">Ayo Bayar Kas BEM FT!</h2>
+          <p class="bayar-kas-subtitle">Mari bersama-sama mendukung kegiatan BEM FT dengan membayar kas tepat waktu</p>
+          
+          <div class="bayar-kas-stats">
+            <div class="stat-box">
+              <span class="stat-number" id="stat-total">0</span>
+              <span class="stat-text">Total Anggota</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-number" id="stat-paid">0</span>
+              <span class="stat-text">Sudah Bayar</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-number" id="stat-unpaid">0</span>
+              <span class="stat-text">Belum Bayar</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Summary Cards -->
-    <div class="summary">
-      <div class="card">
-        <span>Total Anggota</span>
-        <h3 id="total-anggota">0</h3>
+      <!-- Summary Cards -->
+      <div class="summary">
+        <div class="card">
+          <span>Total Anggota</span>
+          <h3 id="total-anggota">0</h3>
+        </div>
+        <div class="card">
+          <span>Anggota Lunas</span>
+          <h3 id="anggota-lunas" class="text-success">0</h3>
+        </div>
+        <div class="card">
+          <span>Belum Lunas</span>
+          <h3 id="anggota-belum-lunas" class="text-danger">0</h3>
+        </div>
       </div>
-      <div class="card">
-        <span>Anggota Lunas</span>
-        <h3 id="anggota-lunas" class="text-success">0</h3>
+
+      <!-- Anggota Table -->
+      <div class="table-wrap">
+        <div style="padding: 1.5rem;">
+          <h2 style="margin: 0 0 1rem 0;">Daftar Anggota</h2>
+          
+          <div class="controls">
+            <div class="search-box">
+              <input type="text" id="anggota-search" placeholder="Cari nama, NIM, atau prodi...">
+              <button id="anggota-search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <select id="status-filter">
+              <option value="all">Semua Status</option>
+              <option value="paid">Lunas</option>
+              <option value="unpaid">Belum Lunas</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama</th>
+              <th>NIM</th>
+              <th>Prodi</th>
+              <th>Jumlah</th>
+              <th>Status</th>
+              <th>Tgl Bayar</th>
+              <th>Metode</th>
+            </tr>
+          </thead>
+          <tbody id="anggota-body">
+            <tr>
+              <td colspan="8" style="text-align:center;padding:2rem;color:#64748b">
+                <i class="fas fa-inbox" style="font-size:2rem;margin-bottom:1rem;opacity:0.3;display:block"></i>
+                Tidak ada data ditemukan
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="card">
-        <span>Belum Lunas</span>
-        <h3 id="anggota-belum-lunas" class="text-danger">0</h3>
+
+      <!-- Info Card -->
+      <div class="ajakan-card">
+        <div class="ajakan-icon"><i class="fas fa-info-circle"></i></div>
+        <div>
+          <h3 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">Informasi</h3>
+          <p style="margin: 0; color: var(--text-secondary);">Data keuangan diperbarui secara real-time. Login sebagai admin untuk mengelola data.</p>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- Anggota Table -->
-    <div class="table-wrap">
-      <div style="padding: 1.5rem;">
-        <h2 style="margin: 0 0 1rem 0;">Daftar Anggota</h2>
+  <!-- Laporan Bulanan Tab -->
+  <section id="bulanan-tab" class="tab-content">
+    <div class="container">
+      <div class="card">
+        <h3 style="margin: 0 0 1.5rem 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-calendar-alt" style="color: var(--primary);"></i>
+          Laporan Pembayaran Kas Per Bulan
+        </h3>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+          Berikut adalah detail pembayaran kas anggota untuk setiap bulan
+        </p>
+
+        <div class="monthly-grid" id="monthly-grid">
+          <!-- Monthly cards will be inserted here by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rekapan Tahunan Tab -->
+  <section id="tahunan-tab" class="tab-content">
+    <div class="container">
+      <div class="yearly-summary">
+        <h2>
+          <i class="fas fa-chart-line"></i>
+          Rekapan Kas Tahunan <span id="current-year" style="font-weight: 800;">2024</span>
+        </h2>
+
+        <div class="yearly-stats-grid">
+          <div class="yearly-stat-card">
+            <div class="yearly-stat-icon total">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="yearly-stat-label">Total Anggota</div>
+            <div class="yearly-stat-value" id="yearly-total-members">0</div>
+          </div>
+
+          <div class="yearly-stat-card">
+            <div class="yearly-stat-icon paid">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="yearly-stat-label">Sudah Lunas</div>
+            <div class="yearly-stat-value text-success" id="yearly-paid-members">0</div>
+          </div>
+
+          <div class="yearly-stat-card">
+            <div class="yearly-stat-icon unpaid">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="yearly-stat-label">Belum Lunas</div>
+            <div class="yearly-stat-value" style="color: #f59e0b;" id="yearly-unpaid-members">0</div>
+          </div>
+
+          <div class="yearly-stat-card">
+            <div class="yearly-stat-icon collected">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="yearly-stat-label">Total Terkumpul</div>
+            <div class="yearly-stat-value" id="yearly-total-collected">Rp 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Breakdown -->
+      <div class="card">
+        <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
+          Rincian Per Bulan
+        </h3>
         
-        <div class="controls">
-          <div class="search-box">
-            <input type="text" id="anggota-search" placeholder="Cari nama, NIM, atau prodi...">
-            <button id="anggota-search-btn"><i class="fas fa-search"></i></button>
-          </div>
-          <select id="status-filter">
-            <option value="all">Semua Status</option>
-            <option value="paid">Lunas</option>
-            <option value="unpaid">Belum Lunas</option>
-          </select>
+        <div class="table-wrap" style="box-shadow: none; border: 1px solid var(--border);">
+          <table>
+            <thead>
+              <tr>
+                <th>Bulan</th>
+                <th>Sudah Bayar</th>
+                <th>Belum Bayar</th>
+                <th>Total Terkumpul</th>
+              </tr>
+            </thead>
+            <tbody id="yearly-breakdown-body">
+              <!-- Yearly breakdown will be inserted here -->
+            </tbody>
+          </table>
         </div>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Nama</th>
-            <th>NIM</th>
-            <th>Prodi</th>
-            <th>Jumlah</th>
-            <th>Status</th>
-            <th>Tgl Bayar</th>
-            <th>Metode</th>
-          </tr>
-        </thead>
-        <tbody id="anggota-body">
-          <tr>
-            <td colspan="8" style="text-align:center;padding:2rem;color:#64748b">
-              <i class="fas fa-inbox" style="font-size:2rem;margin-bottom:1rem;opacity:0.3;display:block"></i>
-              Tidak ada data ditemukan
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Info Card -->
-    <div class="ajakan-card">
-      <div class="ajakan-icon"><i class="fas fa-info-circle"></i></div>
-      <div>
-        <h3 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">Informasi</h3>
-        <p style="margin: 0; color: var(--text-secondary);">Data keuangan diperbarui secara real-time. Login sebagai admin untuk mengelola data.</p>
       </div>
     </div>
   </section>
@@ -563,13 +826,177 @@ let data = JSON.parse(localStorage.getItem("kas_bem_data")) || {
 };
 
 let members = data.members || [];
+let currentTab = 'daftar';
 
 // Load data on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadAnggotaTable(members);
     updateDashboardStats();
     setupEventListeners();
+    
+    // Set current year
+    const currentYearEl = document.getElementById('current-year');
+    if (currentYearEl) {
+        currentYearEl.textContent = new Date().getFullYear();
+    }
 });
+
+// Switch tabs
+function switchTab(tabName) {
+    currentTab = tabName;
+    
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Remove active class from all buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab
+    const selectedTab = document.getElementById(tabName + '-tab');
+    if (selectedTab) {
+        selectedTab.classList.add('active');
+    }
+    
+    // Add active class to clicked button
+    event.target.closest('.tab-btn').classList.add('active');
+    
+    // Load data for the selected tab
+    if (tabName === 'bulanan') {
+        loadMonthlyReport();
+    } else if (tabName === 'tahunan') {
+        loadYearlyReport();
+    }
+}
+
+// Get month name in Indonesian
+function getMonthName(monthIndex) {
+    const months = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    return months[monthIndex];
+}
+
+// Load monthly report
+function loadMonthlyReport() {
+    const monthlyGrid = document.getElementById('monthly-grid');
+    if (!monthlyGrid) return;
+
+    const currentYear = new Date().getFullYear();
+    
+    // Get data for each month
+    const monthlyData = [];
+    
+    for (let i = 0; i < 12; i++) {
+        const monthMembers = members.filter(m => {
+            if (!m.paymentDate) return false;
+            const date = new Date(m.paymentDate);
+            return date.getFullYear() === currentYear && date.getMonth() === i;
+        });
+        
+        const paid = monthMembers.filter(m => m.status === 'paid').length;
+        const unpaid = members.length - paid;
+        const total = monthMembers
+            .filter(m => m.status === 'paid')
+            .reduce((sum, m) => sum + (m.amount || 0), 0);
+        
+        monthlyData.push({
+            month: getMonthName(i),
+            paid,
+            unpaid,
+            total
+        });
+    }
+
+    // Render monthly cards
+    monthlyGrid.innerHTML = monthlyData.map(data => `
+        <div class="month-card">
+            <div class="month-card-header">
+                <div class="month-name">${data.month}</div>
+                <i class="fas fa-calendar-check" style="color: var(--primary); font-size: 1.25rem;"></i>
+            </div>
+            
+            <div class="month-stats">
+                <div class="stat-item">
+                    <div class="stat-label">Sudah Bayar</div>
+                    <div class="stat-value success">${data.paid}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Belum Bayar</div>
+                    <div class="stat-value warning">${data.unpaid}</div>
+                </div>
+            </div>
+            
+            <div class="month-total">
+                <div class="month-total-label">Total Terkumpul</div>
+                <div class="month-total-value">${formatCurrency(data.total)}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Load yearly report
+function loadYearlyReport() {
+    const currentYear = new Date().getFullYear();
+    
+    // Calculate yearly statistics
+    const yearlyPaid = members.filter(m => m.status === 'paid').length;
+    const yearlyUnpaid = members.filter(m => m.status === 'unpaid').length;
+    const yearlyTotal = members
+        .filter(m => m.status === 'paid')
+        .reduce((sum, m) => sum + (m.amount || 0), 0);
+
+    // Update yearly stats
+    const yearlyTotalMembersEl = document.getElementById('yearly-total-members');
+    const yearlyPaidMembersEl = document.getElementById('yearly-paid-members');
+    const yearlyUnpaidMembersEl = document.getElementById('yearly-unpaid-members');
+    const yearlyTotalCollectedEl = document.getElementById('yearly-total-collected');
+
+    if (yearlyTotalMembersEl) yearlyTotalMembersEl.textContent = members.length;
+    if (yearlyPaidMembersEl) yearlyPaidMembersEl.textContent = yearlyPaid;
+    if (yearlyUnpaidMembersEl) yearlyUnpaidMembersEl.textContent = yearlyUnpaid;
+    if (yearlyTotalCollectedEl) yearlyTotalCollectedEl.textContent = formatCurrency(yearlyTotal);
+
+    // Load monthly breakdown
+    const breakdownBody = document.getElementById('yearly-breakdown-body');
+    if (!breakdownBody) return;
+
+    const monthlyBreakdown = [];
+    
+    for (let i = 0; i < 12; i++) {
+        const monthMembers = members.filter(m => {
+            if (!m.paymentDate) return false;
+            const date = new Date(m.paymentDate);
+            return date.getFullYear() === currentYear && date.getMonth() === i;
+        });
+        
+        const paid = monthMembers.filter(m => m.status === 'paid').length;
+        const unpaid = members.length - paid;
+        const total = monthMembers
+            .filter(m => m.status === 'paid')
+            .reduce((sum, m) => sum + (m.amount || 0), 0);
+        
+        monthlyBreakdown.push({
+            month: getMonthName(i),
+            paid,
+            unpaid,
+            total
+        });
+    }
+
+    breakdownBody.innerHTML = monthlyBreakdown.map(data => `
+        <tr>
+            <td><strong>${data.month}</strong></td>
+            <td><span class="badge badge-success">${data.paid} orang</span></td>
+            <td><span class="badge unpaid">${data.unpaid} orang</span></td>
+            <td><strong>${formatCurrency(data.total)}</strong></td>
+        </tr>
+    `).join('');
+}
 
 // Update dashboard statistics
 function updateDashboardStats() {
@@ -659,6 +1086,13 @@ function setupEventListeners() {
             
             loadAnggotaTable(members);
             updateDashboardStats();
+            
+            // Reload current tab data
+            if (currentTab === 'bulanan') {
+                loadMonthlyReport();
+            } else if (currentTab === 'tahunan') {
+                loadYearlyReport();
+            }
         }
     });
 
@@ -672,6 +1106,13 @@ function setupEventListeners() {
             members = currentMembers;
             loadAnggotaTable(members);
             updateDashboardStats();
+            
+            // Reload current tab data
+            if (currentTab === 'bulanan') {
+                loadMonthlyReport();
+            } else if (currentTab === 'tahunan') {
+                loadYearlyReport();
+            }
         }
     }, 2000);
 }
