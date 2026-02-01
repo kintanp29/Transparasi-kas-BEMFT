@@ -4,6 +4,7 @@ let transactions = [];
 let deleteTargetId = null;
 let members = [];
 let deleteMemberTargetId = null;
+let currentTab = 'overview';
 
 // Check authentication
 function checkAuth() {
@@ -65,6 +66,43 @@ function initDashboard() {
             }
         });
     }
+
+    // Set current year
+    const currentYearEl = document.getElementById('current-year');
+    if (currentYearEl) {
+        currentYearEl.textContent = new Date().getFullYear();
+    }
+}
+
+// Switch tabs
+function switchTab(tabName) {
+    currentTab = tabName;
+    
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Remove active class from all buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab
+    const selectedTab = document.getElementById(tabName + '-tab');
+    if (selectedTab) {
+        selectedTab.classList.add('active');
+    }
+    
+    // Add active class to clicked button
+    event.target.closest('.tab-btn').classList.add('active');
+    
+    // Load data for the selected tab
+    if (tabName === 'monthly') {
+        loadMonthlyReport();
+    } else if (tabName === 'yearly') {
+        loadYearlyReport();
+    }
 }
 
 // Logout function
@@ -114,6 +152,15 @@ function formatCurrency(amount) {
 function formatDate(dateString) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('id-ID', options);
+}
+
+// Get month name in Indonesian
+function getMonthName(monthIndex) {
+    const months = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    return months[monthIndex];
 }
 
 // Animate counter
@@ -270,13 +317,19 @@ function saveTransaction() {
 
     const finalAmount = type === 'income' ? amount : -amount;
 
+    // Calculate new balance
+    const lastBalance = transactions.length > 0 ?
+        transactions[transactions.length - 1].balance : 0;
+
     const transaction = {
         id: id ? parseInt(id) : Date.now(),
         date,
-        description,
         category,
+        description,
         amount: finalAmount,
-        type,
+        balance: id ? 
+            (transactions.find(t => t.id === parseInt(id))?.balance || lastBalance) :
+            lastBalance + finalAmount,
         createdBy: currentUser.username,
         createdAt: new Date().toISOString()
     };
@@ -289,10 +342,7 @@ function saveTransaction() {
         // Update existing
         const index = data.transactions.findIndex(t => t.id === parseInt(id));
         if (index !== -1) {
-            data.transactions[index] = {
-                ...transaction,
-                balance: calculateBalanceUpTo(data.transactions, parseInt(id))
-            };
+            data.transactions[index] = transaction;
         }
         showToast('success', 'Transaksi berhasil diperbarui!');
     } else {
@@ -301,58 +351,18 @@ function saveTransaction() {
         showToast('success', 'Transaksi berhasil ditambahkan!');
     }
 
-    // Recalculate all balances
-    data.transactions = recalculateAllBalances(data.transactions);
-
     // Save to localStorage
     localStorage.setItem('kas_bem_data', JSON.stringify(data));
 
-    // Trigger storage event for other tabs/windows
-    window.dispatchEvent(new StorageEvent('storage', {
-        key: 'kas_bem_data',
-        newValue: JSON.stringify(data),
-        url: window.location.href,
-        storageArea: localStorage
-    }));
-
-    // Redirect to landing page after save
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 1500);
-}
-
-// Recalculate all transaction balances
-function recalculateAllBalances(transactions) {
-    // Sort by date
-    const sorted = transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    let runningBalance = 0;
-
-    return sorted.map(transaction => {
-        runningBalance += transaction.amount;
-        return {
-            ...transaction,
-            balance: runningBalance
-        };
-    });
+    // Update UI
+    transactions = data.transactions;
+    updateDashboard();
+    closeModal();
 }
 
 // Edit transaction
 function editTransaction(id) {
     openModal('edit', id);
-}
-
-// Calculate running balance up to a specific transaction
-function calculateBalanceUpTo(allTransactions, transactionId) {
-    const sortedTransactions = allTransactions
-        .sort((a, b) => new Date(a.date) - new Date(b.date))
-        .filter(t => {
-            const tDate = new Date(t.date);
-            const targetDate = new Date(allTransactions.find(tr => tr.id === transactionId)?.date);
-            return tDate <= targetDate;
-        });
-
-    return sortedTransactions.reduce((balance, t) => balance + t.amount, 0);
 }
 
 // Delete modal
@@ -377,94 +387,33 @@ function confirmDelete() {
     if (data.transactions) {
         data.transactions = data.transactions.filter(t => t.id !== deleteTargetId);
 
-        // Recalculate all balances
-        data.transactions = recalculateAllBalances(data.transactions);
-
         localStorage.setItem('kas_bem_data', JSON.stringify(data));
-
-        // Trigger storage event
-        window.dispatchEvent(new StorageEvent('storage', {
-            key: 'kas_bem_data',
-            newValue: JSON.stringify(data),
-            url: window.location.href,
-            storageArea: localStorage
-        }));
-
         showToast('success', 'Transaksi berhasil dihapus');
-        loadData();
+        transactions = data.transactions;
+        updateDashboard();
     }
 
     closeDeleteModal();
 }
 
-// Refresh data
-function refreshData() {
-    showToast('info', 'Memuat ulang data...');
-    loadData();
-    setTimeout(() => {
-        showToast('success', 'Data berhasil dimuat ulang!');
-    }, 500);
-}
-
-// Export to Excel
-function exportToExcel() {
-    const data = JSON.parse(localStorage.getItem('kas_bem_data') || '{}');
-    const transactions = data.transactions || [];
-
-    if (transactions.length === 0) {
-        showToast('info', 'Tidak ada data untuk diekspor');
-        return;
-    }
-
-    // Create CSV content
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Tanggal,Deskripsi,Kategori,Jenis,Jumlah,Saldo,Dibuat Oleh\n";
-
-    // Sort by date
-    const sorted = transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    sorted.forEach(transaction => {
-        const typeLabel = transaction.amount > 0 ? 'Pemasukan' : 'Pengeluaran';
-        csvContent += `"${formatDate(transaction.date)}","${transaction.description}","${transaction.category}","${typeLabel}","${formatCurrency(Math.abs(transaction.amount))}","${formatCurrency(transaction.balance || 0)}","${transaction.createdBy}"\n`;
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "laporan_keuangan_" + new Date().toISOString().split('T')[0] + ".csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    showToast('success', 'Data berhasil diekspor ke CSV');
-}
-
-// Member CRUD Functions
-
-// Update member statistics
+// Update member stats
 function updateMemberStats() {
     const totalMembers = members.length;
     const paidMembers = members.filter(m => m.status === 'paid').length;
     const unpaidMembers = members.filter(m => m.status === 'unpaid').length;
-    const totalCollected = members.filter(m => m.status === 'paid').reduce((sum, m) => sum + m.amount, 0);
+    const totalCollected = members
+        .filter(m => m.status === 'paid')
+        .reduce((sum, m) => sum + (m.amount || 0), 0);
 
     const totalMembersEl = document.getElementById('total-members');
     const paidMembersEl = document.getElementById('paid-members');
     const unpaidMembersEl = document.getElementById('unpaid-members');
     const totalCollectedEl = document.getElementById('total-collected');
 
-    if (totalMembersEl) {
-        animateValue(totalMembersEl, 0, totalMembers, 1000, false);
-    }
-    if (paidMembersEl) {
-        animateValue(paidMembersEl, 0, paidMembers, 1000, false);
-    }
-    if (unpaidMembersEl) {
-        animateValue(unpaidMembersEl, 0, unpaidMembers, 1000, false);
-    }
-    if (totalCollectedEl) {
-        animateValue(totalCollectedEl, 0, totalCollected, 1000, true);
-    }
+    if (totalMembersEl) totalMembersEl.textContent = totalMembers;
+    if (paidMembersEl) paidMembersEl.textContent = paidMembers;
+    if (unpaidMembersEl) unpaidMembersEl.textContent = unpaidMembers;
+    if (totalCollectedEl) totalCollectedEl.textContent = formatCurrency(totalCollected);
 }
 
 // Load member table
@@ -475,25 +424,30 @@ function loadMemberTable(data) {
     if (data.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="7" class="text-center">Belum ada data anggota</td>
+                <td colspan="8" class="text-center">Belum ada data anggota</td>
             </tr>
         `;
         return;
     }
 
-    tbody.innerHTML = data.map(member => `
+    tbody.innerHTML = data.map((member, index) => `
         <tr>
-            <td>${member.nim}</td>
+            <td>${index + 1}</td>
             <td>${member.name}</td>
+            <td>${member.nim}</td>
             <td>${member.prodi}</td>
             <td>${formatCurrency(member.amount)}</td>
-            <td><span class="badge ${member.status === 'paid' ? 'badge-success' : 'badge-warning'}">${member.status === 'paid' ? 'Sudah Bayar' : 'Belum Bayar'}</span></td>
+            <td>
+                <span class="badge ${member.status === 'paid' ? 'badge-success' : 'unpaid'}">
+                    ${member.status === 'paid' ? 'Sudah Bayar' : 'Belum Bayar'}
+                </span>
+            </td>
             <td>${member.paymentDate ? formatDate(member.paymentDate) : '-'}</td>
             <td>
-                <button class="btn btn-sm btn-warning" onclick="editMember(${member.id})">
+                <button class="btn btn-sm btn-warning" onclick="editMember(${member.id})" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-sm btn-danger" onclick="openDeleteMemberModal(${member.id})">
+                <button class="btn btn-sm btn-danger" onclick="openDeleteMemberModal(${member.id})" style="padding: 0.5rem 0.75rem; font-size: 0.875rem; background: var(--danger);">
                     <i class="fas fa-trash"></i>
                 </button>
             </td>
@@ -511,7 +465,8 @@ function openMemberModal(mode, memberId = null) {
         title.textContent = 'Tambah Anggota';
         form.reset();
         document.getElementById('member-id').value = '';
-        document.getElementById('member-payment-date').value = '';
+        document.getElementById('member-payment-date').value = new Date().toISOString().split('T')[0];
+        togglePaymentDate();
     } else {
         title.textContent = 'Edit Anggota';
         const member = members.find(m => m.id === memberId);
@@ -523,6 +478,7 @@ function openMemberModal(mode, memberId = null) {
             document.getElementById('member-amount').value = member.amount;
             document.getElementById('member-status').value = member.status;
             document.getElementById('member-payment-date').value = member.paymentDate || '';
+            togglePaymentDate();
         }
     }
 
@@ -537,8 +493,26 @@ function closeMemberModal() {
     document.body.style.overflow = 'auto';
 }
 
+// Toggle payment date visibility
+function togglePaymentDate() {
+    const status = document.getElementById('member-status').value;
+    const dateGroup = document.getElementById('payment-date-group');
+    const dateInput = document.getElementById('member-payment-date');
+    
+    if (status === 'paid') {
+        dateGroup.style.display = 'block';
+        dateInput.required = true;
+    } else {
+        dateGroup.style.display = 'none';
+        dateInput.required = false;
+        dateInput.value = '';
+    }
+}
+
 // Save member
-function saveMember() {
+function saveMember(event) {
+    event.preventDefault();
+    
     const id = document.getElementById('member-id').value;
     const nim = document.getElementById('member-nim').value;
     const name = document.getElementById('member-name').value;
@@ -560,6 +534,7 @@ function saveMember() {
         amount,
         status,
         paymentDate: status === 'paid' ? paymentDate : '',
+        method: status === 'paid' ? 'Transfer' : '-',
         createdBy: currentUser.username,
         createdAt: new Date().toISOString()
     };
@@ -647,30 +622,143 @@ function confirmDeleteMember() {
 
 // Filter members
 function filterMembers() {
+    const searchTerm = document.getElementById('member-search').value.toLowerCase();
     const filter = document.getElementById('payment-filter').value;
+    
     let filtered = members;
 
+    // Filter by search
+    if (searchTerm) {
+        filtered = filtered.filter(m =>
+            m.name.toLowerCase().includes(searchTerm) ||
+            m.nim.toLowerCase().includes(searchTerm) ||
+            m.prodi.toLowerCase().includes(searchTerm)
+        );
+    }
+
+    // Filter by status
     if (filter !== 'all') {
-        filtered = members.filter(m => m.status === filter);
+        filtered = filtered.filter(m => m.status === filter);
     }
 
     loadMemberTable(filtered);
 }
 
-// Filter members by month
-function filterMembersByMonth() {
-    const filter = document.getElementById('member-month-filter').value;
-    let filtered = members;
+// Load monthly report
+function loadMonthlyReport() {
+    const monthlyGrid = document.getElementById('monthly-grid');
+    if (!monthlyGrid) return;
 
-    if (filter) {
-        filtered = members.filter(m => {
+    const currentYear = new Date().getFullYear();
+    
+    // Get data for each month
+    const monthlyData = [];
+    
+    for (let i = 0; i < 12; i++) {
+        const monthMembers = members.filter(m => {
             if (!m.paymentDate) return false;
             const date = new Date(m.paymentDate);
-            return date.getMonth() === parseInt(filter) - 1;
+            return date.getFullYear() === currentYear && date.getMonth() === i;
+        });
+        
+        const paid = monthMembers.filter(m => m.status === 'paid').length;
+        const unpaid = members.length - paid; // Assuming all members should pay each month
+        const total = monthMembers
+            .filter(m => m.status === 'paid')
+            .reduce((sum, m) => sum + (m.amount || 0), 0);
+        
+        monthlyData.push({
+            month: getMonthName(i),
+            paid,
+            unpaid,
+            total
         });
     }
 
-    loadMemberTable(filtered);
+    // Render monthly cards
+    monthlyGrid.innerHTML = monthlyData.map(data => `
+        <div class="month-card">
+            <div class="month-card-header">
+                <div class="month-name">${data.month}</div>
+                <i class="fas fa-calendar-check" style="color: var(--primary); font-size: 1.25rem;"></i>
+            </div>
+            
+            <div class="month-stats">
+                <div class="stat-item">
+                    <div class="stat-label">Sudah Bayar</div>
+                    <div class="stat-value success">${data.paid}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Belum Bayar</div>
+                    <div class="stat-value warning">${data.unpaid}</div>
+                </div>
+            </div>
+            
+            <div class="month-total">
+                <div class="month-total-label">Total Terkumpul</div>
+                <div class="month-total-value">${formatCurrency(data.total)}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Load yearly report
+function loadYearlyReport() {
+    const currentYear = new Date().getFullYear();
+    
+    // Calculate yearly statistics
+    const yearlyPaid = members.filter(m => m.status === 'paid').length;
+    const yearlyUnpaid = members.filter(m => m.status === 'unpaid').length;
+    const yearlyTotal = members
+        .filter(m => m.status === 'paid')
+        .reduce((sum, m) => sum + (m.amount || 0), 0);
+
+    // Update yearly stats
+    const yearlyTotalMembersEl = document.getElementById('yearly-total-members');
+    const yearlyPaidMembersEl = document.getElementById('yearly-paid-members');
+    const yearlyUnpaidMembersEl = document.getElementById('yearly-unpaid-members');
+    const yearlyTotalCollectedEl = document.getElementById('yearly-total-collected');
+
+    if (yearlyTotalMembersEl) yearlyTotalMembersEl.textContent = members.length;
+    if (yearlyPaidMembersEl) yearlyPaidMembersEl.textContent = yearlyPaid;
+    if (yearlyUnpaidMembersEl) yearlyUnpaidMembersEl.textContent = yearlyUnpaid;
+    if (yearlyTotalCollectedEl) yearlyTotalCollectedEl.textContent = formatCurrency(yearlyTotal);
+
+    // Load monthly breakdown
+    const breakdownBody = document.getElementById('yearly-breakdown-body');
+    if (!breakdownBody) return;
+
+    const monthlyBreakdown = [];
+    
+    for (let i = 0; i < 12; i++) {
+        const monthMembers = members.filter(m => {
+            if (!m.paymentDate) return false;
+            const date = new Date(m.paymentDate);
+            return date.getFullYear() === currentYear && date.getMonth() === i;
+        });
+        
+        const paid = monthMembers.filter(m => m.status === 'paid').length;
+        const unpaid = members.length - paid;
+        const total = monthMembers
+            .filter(m => m.status === 'paid')
+            .reduce((sum, m) => sum + (m.amount || 0), 0);
+        
+        monthlyBreakdown.push({
+            month: getMonthName(i),
+            paid,
+            unpaid,
+            total
+        });
+    }
+
+    breakdownBody.innerHTML = monthlyBreakdown.map(data => `
+        <tr>
+            <td><strong>${data.month}</strong></td>
+            <td><span class="badge badge-success">${data.paid} orang</span></td>
+            <td><span class="badge unpaid">${data.unpaid} orang</span></td>
+            <td><strong>${formatCurrency(data.total)}</strong></td>
+        </tr>
+    `).join('');
 }
 
 // Export members to Excel
@@ -702,6 +790,93 @@ function exportMembersToExcel() {
     showToast('success', 'Data anggota berhasil diekspor ke CSV');
 }
 
+// Export monthly report to Excel
+function exportMonthlyReport() {
+    const currentYear = new Date().getFullYear();
+    
+    // Create CSV content
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += `Laporan Pembayaran Kas Per Bulan - Tahun ${currentYear}\n\n`;
+    csvContent += "Bulan,Sudah Bayar,Belum Bayar,Total Terkumpul\n";
+
+    for (let i = 0; i < 12; i++) {
+        const monthMembers = members.filter(m => {
+            if (!m.paymentDate) return false;
+            const date = new Date(m.paymentDate);
+            return date.getFullYear() === currentYear && date.getMonth() === i;
+        });
+        
+        const paid = monthMembers.filter(m => m.status === 'paid').length;
+        const unpaid = members.length - paid;
+        const total = monthMembers
+            .filter(m => m.status === 'paid')
+            .reduce((sum, m) => sum + (m.amount || 0), 0);
+        
+        csvContent += `"${getMonthName(i)}","${paid} orang","${unpaid} orang","${formatCurrency(total)}"\n`;
+    }
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `laporan_bulanan_${currentYear}_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast('success', 'Laporan bulanan berhasil diekspor ke Excel');
+}
+
+// Export yearly report to Excel
+function exportYearlyReport() {
+    const currentYear = new Date().getFullYear();
+    
+    // Calculate yearly statistics
+    const yearlyPaid = members.filter(m => m.status === 'paid').length;
+    const yearlyUnpaid = members.filter(m => m.status === 'unpaid').length;
+    const yearlyTotal = members
+        .filter(m => m.status === 'paid')
+        .reduce((sum, m) => sum + (m.amount || 0), 0);
+    
+    // Create CSV content
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += `Rekapan Kas Tahunan - Tahun ${currentYear}\n\n`;
+    csvContent += "RINGKASAN TAHUNAN\n";
+    csvContent += "Kategori,Jumlah\n";
+    csvContent += `"Total Anggota","${members.length} orang"\n`;
+    csvContent += `"Sudah Lunas","${yearlyPaid} orang"\n`;
+    csvContent += `"Belum Lunas","${yearlyUnpaid} orang"\n`;
+    csvContent += `"Total Terkumpul","${formatCurrency(yearlyTotal)}"\n\n`;
+    
+    csvContent += "RINCIAN PER BULAN\n";
+    csvContent += "Bulan,Sudah Bayar,Belum Bayar,Total Terkumpul\n";
+
+    for (let i = 0; i < 12; i++) {
+        const monthMembers = members.filter(m => {
+            if (!m.paymentDate) return false;
+            const date = new Date(m.paymentDate);
+            return date.getFullYear() === currentYear && date.getMonth() === i;
+        });
+        
+        const paid = monthMembers.filter(m => m.status === 'paid').length;
+        const unpaid = members.length - paid;
+        const total = monthMembers
+            .filter(m => m.status === 'paid')
+            .reduce((sum, m) => sum + (m.amount || 0), 0);
+        
+        csvContent += `"${getMonthName(i)}","${paid} orang","${unpaid} orang","${formatCurrency(total)}"\n`;
+    }
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `rekapan_tahunan_${currentYear}_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast('success', 'Rekapan tahunan berhasil diekspor ke Excel');
+}
+
 // Listen for storage changes from other tabs
 window.addEventListener('storage', function(e) {
     if (e.key === 'kas_bem_data') {
@@ -713,72 +888,40 @@ window.addEventListener('storage', function(e) {
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', initDashboard);
 
-// Set up form event listeners
-document.getElementById('member-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    saveMember();
-});
+// Set up form event listeners (only if elements exist)
+const memberForm = document.getElementById('member-form');
+if (memberForm) {
+    memberForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveMember(e);
+    });
+}
 
 // Set up search functionality
-document.getElementById('member-search').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = members.filter(m =>
-        m.name.toLowerCase().includes(searchTerm)
-    );
-    loadMemberTable(filtered);
-});
+const memberSearch = document.getElementById('member-search');
+if (memberSearch) {
+    memberSearch.addEventListener('input', filterMembers);
+}
 
 // Set up transaction form event listener
-document.getElementById('transaction-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    saveTransaction();
-});     
+const transactionForm = document.getElementById('transaction-form');
+if (transactionForm) {
+    transactionForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveTransaction();
+    });
+}
 
 // Set up transaction search functionality
-document.getElementById('dashboard-search').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = transactions.filter(t =>
-        t.description.toLowerCase().includes(searchTerm) ||                                                                                 
-        t.category.toLowerCase().includes(searchTerm) ||
-        t.createdBy.toLowerCase().includes(searchTerm)
-    );
-    loadTransactionTable(filtered);
-}); 
-
-// Set up transaction form event listener
-document.getElementById('transaction-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    saveTransaction();
-});    
-
-// Set up transaction search functionality
-document.getElementById('dashboard-search').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = transactions.filter(t =>
-        t.description.toLowerCase().includes(searchTerm) ||                                                                                 
-        t.category.toLowerCase().includes(searchTerm) ||
-        t.createdBy.toLowerCase().includes(searchTerm)
-    );
-    loadTransactionTable(filtered);
-});
-
-// Set up transaction form event listener
-document.getElementById('transaction-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    saveTransaction();
-}); 
-// Set up transaction search functionality
-document.getElementById('dashboard-search').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = transactions.filter(t =>
-        t.description.toLowerCase().includes(searchTerm) ||                                                                                 
-        t.category.toLowerCase().includes(searchTerm) ||
-        t.createdBy.toLowerCase().includes(searchTerm)
-    );
-    loadTransactionTable(filtered);
-}); 
-// Set up transaction form event listener
-document.getElementById('transaction-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    saveTransaction();
-});
+const dashboardSearch = document.getElementById('dashboard-search');
+if (dashboardSearch) {
+    dashboardSearch.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const filtered = transactions.filter(t =>
+            t.description.toLowerCase().includes(searchTerm) ||
+            t.category.toLowerCase().includes(searchTerm) ||
+            t.createdBy.toLowerCase().includes(searchTerm)
+        );
+        loadTransactionTable(filtered);
+    });
+}
