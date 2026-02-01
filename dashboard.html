@@ -97,6 +97,46 @@ nav a.active::after{width:100%}
   box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
 }
 
+/* ===== TAB NAVIGATION ===== */
+.tab-navigation {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0 1.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.tab-btn {
+  padding: 1rem 2rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-btn:hover {
+  color: var(--primary);
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 /* ===== CONTROLS ===== */
 .controls{
   display:flex;gap:1rem;flex-wrap:wrap;
@@ -137,6 +177,175 @@ select{
 .card:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(0,0,0,.15)}
 .card span{color:var(--text-secondary);font-size:.85rem}
 .card h3{font-size:2.2rem;margin-top:.5rem;font-family:'JetBrains Mono',monospace}
+
+/* ===== MONTHLY REPORT CARD ===== */
+.monthly-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.month-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: var(--transition);
+}
+
+.month-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.month-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.month-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.month-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.stat-value.success {
+  color: var(--success);
+}
+
+.stat-value.warning {
+  color: var(--warning);
+}
+
+.month-total {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 2px solid var(--border);
+}
+
+.month-total-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.month-total-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ===== YEARLY SUMMARY ===== */
+.yearly-summary {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.yearly-summary h2 {
+  margin: 0 0 2rem 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.yearly-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.yearly-stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.yearly-stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.yearly-stat-icon.total {
+  background: var(--gradient-1);
+}
+
+.yearly-stat-icon.paid {
+  background: var(--gradient-2);
+}
+
+.yearly-stat-icon.unpaid {
+  background: var(--gradient-3);
+}
+
+.yearly-stat-icon.collected {
+  background: var(--gradient-4);
+}
+
+.yearly-stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.yearly-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+}
 
 /* ===== MEMBER ACTIONS ===== */
 .member-actions{
@@ -199,125 +408,90 @@ tbody tr:hover{
 .badge.unpaid{background:rgba(239,68,68,0.1);color:#dc2626}
 .text-success{color:#059669}
 .text-danger{color:#dc2626}
-
-.btn-sm {
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: var(--transition);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.btn-sm.btn-warning {
-  background: var(--gradient-3);
-  color: white;
-}
-
-.btn-sm.btn-danger {
-  background: var(--gradient-4);
-  color: white;
-}
-
-.btn-sm:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
+.text-center{text-align:center}
 
 /* ===== MODAL ===== */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+.modal-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.5);backdrop-filter:blur(5px);
+  display:flex;align-items:center;justify-content:center;
+  z-index:999;transition:var(--transition)
 }
-
-.modal-overlay.hidden {
-  display: none;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 20px;
-  padding: 2rem;
-  width: 100%;
-  max-width: 600px;
-  box-shadow: var(--shadow-lg);
+.modal-overlay.hidden{display:none}
+.modal-content{
+  background:#fff;border-radius:24px;
+  max-width:600px;width:90%;max-height:90vh;
+  overflow-y:auto;padding:2.5rem;
+  box-shadow:0 25px 50px rgba(0,0,0,0.2);
   animation: modalSlideIn 0.3s ease-out;
-  max-height: 90vh;
-  overflow-y: auto;
 }
-
-.form-group {
-  margin-bottom: 1.5rem;
+@keyframes modalSlideIn{
+  from{opacity:0;transform:translateY(-20px)}
+  to{opacity:1;transform:translateY(0)}
 }
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: var(--text-primary);
+.form-group{margin-bottom:1.5rem}
+.form-group label{
+  display:block;margin-bottom:.5rem;
+  font-weight:600;color:var(--text-primary);font-size:.95rem
 }
-
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 0.9rem;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  font-size: 1rem;
-  transition: var(--transition);
-  background: var(--bg-primary);
-  color: var(--text-primary);
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:.9rem 1rem;border-radius:12px;
+  border:2px solid var(--border);background:#fff;
+  font-size:1rem;transition:var(--transition);
+  font-family: inherit;
 }
-
-.form-group input:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  outline:none;border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(102,126,234,0.1)
 }
 
 /* ===== ANIMATIONS ===== */
 @keyframes float{
-  0%,100%{transform:translateY(0px)}
+  0%,100%{transform:translateY(0)}
   50%{transform:translateY(-10px)}
 }
 
-@keyframes modalSlideIn {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;top:2rem;right:2rem;
+  background:#fff;padding:1rem 1.5rem;
+  border-radius:12px;box-shadow:var(--shadow-lg);
+  display:flex;align-items:center;gap:1rem;
+  animation:slideInRight 0.3s ease-out;
+  z-index:9999;border-left:4px solid var(--success)
+}
+.toast.error{border-left-color:var(--danger)}
+.toast.info{border-left-color:var(--info)}
+.toast i{font-size:1.25rem}
+.toast.success i{color:var(--success)}
+.toast.error i{color:var(--danger)}
+.toast.info i{color:var(--info)}
+
+@keyframes slideInRight{
+  from{transform:translateX(400px);opacity:0}
+  to{transform:translateX(0);opacity:1}
+}
+@keyframes slideOutRight{
+  from{transform:translateX(0);opacity:1}
+  to{transform:translateX(400px);opacity:0}
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .header-wrap{
+  .header-wrap {
     flex-direction: column;
     gap: 1rem;
   }
-  nav{
+  nav {
     flex-direction: column;
-    gap: 0.5rem;
+    width: 100%;
   }
-  .controls{
-    flex-direction: column;
+  .tab-navigation {
+    flex-wrap: wrap;
   }
-  .summary{
-    grid-template-columns: 1fr;
-  }
-  table {
-    font-size: 0.85rem;
+  .tab-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
   }
   th, td {
     padding: 0.75rem;
@@ -348,86 +522,186 @@ tbody tr:hover{
     <!-- Main Content -->
     <main style="padding: 2rem 0;">
         <div class="container">
-            <!-- Member Stats -->
-            <div class="card">
-                <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-users" style="color: var(--primary);"></i>
-                    Statistik Kas Anggota
-                </h3>
-                <div class="summary">
-                    <div class="card">
-                        <span>Total Anggota</span>
-                        <h3 id="total-members">0</h3>
-                    </div>
-                    <div class="card">
-                        <span>Sudah Bayar</span>
-                        <h3 class="text-success" id="paid-members">0</h3>
-                    </div>
-                    <div class="card">
-                        <span>Belum Bayar</span>
-                        <h3 style="color:#fbbf24" id="unpaid-members">0</h3>
-                    </div>
-                    <div class="card">
-                        <span>Total Terkumpul</span>
-                        <h3 id="total-collected">Rp 0</h3>
-                    </div>
-                </div>
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-btn active" onclick="switchTab('overview')">
+                    <i class="fas fa-chart-pie"></i> Overview
+                </button>
+                <button class="tab-btn" onclick="switchTab('monthly')">
+                    <i class="fas fa-calendar-alt"></i> Laporan Bulanan
+                </button>
+                <button class="tab-btn" onclick="switchTab('yearly')">
+                    <i class="fas fa-chart-bar"></i> Rekapan Tahunan
+                </button>
             </div>
 
-            <!-- Member Actions -->
-            <div class="member-actions">
-                <h3>Manajemen Kas Anggota</h3>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <button class="btn" onclick="openMemberModal('add')">
-                        <i class="fas fa-user-plus"></i> Tambah Anggota
-                    </button>
-                    <button class="btn-secondary" onclick="exportMembersToExcel()">
-                        <i class="fas fa-download"></i> Export Data
-                    </button>
-                </div>
-            </div>
-
-            <!-- Member Table -->
-            <div class="table-wrap">
-                <div style="padding: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                        <h2 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Daftar Anggota</h2>
-                        <div class="controls" style="margin: 0;">
-                            <div class="search-box">
-                                <input type="text" id="member-search" placeholder="Cari anggota...">
-                                <button onclick="filterMembers()"><i class="fas fa-search"></i></button>
-                            </div>
-                            <select id="payment-filter" onchange="filterMembers()">
-                                <option value="all">Semua Status</option>
-                                <option value="paid">Sudah Bayar</option>
-                                <option value="unpaid">Belum Bayar</option>
-                            </select>
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content active">
+                <!-- Member Stats -->
+                <div class="card">
+                    <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-users" style="color: var(--primary);"></i>
+                        Statistik Kas Anggota
+                    </h3>
+                    <div class="summary">
+                        <div class="card">
+                            <span>Total Anggota</span>
+                            <h3 id="total-members">0</h3>
+                        </div>
+                        <div class="card">
+                            <span>Sudah Bayar</span>
+                            <h3 class="text-success" id="paid-members">0</h3>
+                        </div>
+                        <div class="card">
+                            <span>Belum Bayar</span>
+                            <h3 style="color:#fbbf24" id="unpaid-members">0</h3>
+                        </div>
+                        <div class="card">
+                            <span>Total Terkumpul</span>
+                            <h3 id="total-collected">Rp 0</h3>
                         </div>
                     </div>
                 </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>NIM</th>
-                            <th>Prodi</th>
-                            <th>Jumlah</th>
-                            <th>Status</th>
-                            <th>Tgl Bayar</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="member-table-body">
-                        <tr>
-                            <td colspan="8" style="text-align:center;padding:2rem;color:#64748b">
-                                <i class="fas fa-inbox" style="font-size:2rem;margin-bottom:1rem;opacity:0.3;display:block"></i>
-                                Tidak ada data ditemukan
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <!-- Member Actions -->
+                <div class="member-actions">
+                    <h3>Manajemen Kas Anggota</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn" onclick="openMemberModal('add')">
+                            <i class="fas fa-user-plus"></i> Tambah Anggota
+                        </button>
+                        <button class="btn-secondary" onclick="exportMembersToExcel()">
+                            <i class="fas fa-download"></i> Export Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Member Table -->
+                <div class="table-wrap">
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                            <h2 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Daftar Anggota</h2>
+                            <div class="controls" style="margin: 0;">
+                                <div class="search-box">
+                                    <input type="text" id="member-search" placeholder="Cari anggota...">
+                                    <button onclick="filterMembers()"><i class="fas fa-search"></i></button>
+                                </div>
+                                <select id="payment-filter" onchange="filterMembers()">
+                                    <option value="all">Semua Status</option>
+                                    <option value="paid">Sudah Bayar</option>
+                                    <option value="unpaid">Belum Bayar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>NIM</th>
+                                <th>Prodi</th>
+                                <th>Jumlah</th>
+                                <th>Status</th>
+                                <th>Tgl Bayar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="member-table-body">
+                            <tr>
+                                <td colspan="8" style="text-align:center;padding:2rem;color:#64748b">
+                                    <i class="fas fa-inbox" style="font-size:2rem;margin-bottom:1rem;opacity:0.3;display:block"></i>
+                                    Tidak ada data ditemukan
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Monthly Tab -->
+            <div id="monthly-tab" class="tab-content">
+                <div class="card">
+                    <h3 style="margin: 0 0 1.5rem 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-calendar-alt" style="color: var(--primary);"></i>
+                        Laporan Pembayaran Kas Per Bulan
+                    </h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Berikut adalah detail pembayaran kas anggota untuk setiap bulan
+                    </p>
+
+                    <div class="monthly-grid" id="monthly-grid">
+                        <!-- Monthly cards will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yearly Tab -->
+            <div id="yearly-tab" class="tab-content">
+                <div class="yearly-summary">
+                    <h2>
+                        <i class="fas fa-chart-line"></i>
+                        Rekapan Kas Tahunan <span id="current-year" style="font-weight: 800;">2024</span>
+                    </h2>
+
+                    <div class="yearly-stats-grid">
+                        <div class="yearly-stat-card">
+                            <div class="yearly-stat-icon total">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="yearly-stat-label">Total Anggota</div>
+                            <div class="yearly-stat-value" id="yearly-total-members">0</div>
+                        </div>
+
+                        <div class="yearly-stat-card">
+                            <div class="yearly-stat-icon paid">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="yearly-stat-label">Sudah Lunas</div>
+                            <div class="yearly-stat-value text-success" id="yearly-paid-members">0</div>
+                        </div>
+
+                        <div class="yearly-stat-card">
+                            <div class="yearly-stat-icon unpaid">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="yearly-stat-label">Belum Lunas</div>
+                            <div class="yearly-stat-value" style="color: #f59e0b;" id="yearly-unpaid-members">0</div>
+                        </div>
+
+                        <div class="yearly-stat-card">
+                            <div class="yearly-stat-icon collected">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="yearly-stat-label">Total Terkumpul</div>
+                            <div class="yearly-stat-value" id="yearly-total-collected">Rp 0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Breakdown -->
+                <div class="card">
+                    <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
+                        Rincian Per Bulan
+                    </h3>
+                    
+                    <div class="table-wrap" style="box-shadow: none; border: 1px solid var(--border);">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Bulan</th>
+                                    <th>Sudah Bayar</th>
+                                    <th>Belum Bayar</th>
+                                    <th>Total Terkumpul</th>
+                                </tr>
+                            </thead>
+                            <tbody id="yearly-breakdown-body">
+                                <!-- Yearly breakdown will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
