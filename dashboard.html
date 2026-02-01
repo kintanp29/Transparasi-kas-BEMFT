@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin - Transparansi Keuangan BEM FT</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary: #667eea;
+  --primary-dark: #5a67d8;
+  --secondary: #764ba2;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --transition: all 0.3s ease;
+  --gradient-1: linear-gradient(135deg, var(--primary), var(--secondary));
+  --gradient-2: linear-gradient(135deg, var(--success), #22d3ee);
+  --gradient-3: linear-gradient(135deg, var(--warning), #f97316);
+  --gradient-4: linear-gradient(135deg, var(--danger), #ec4899);
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #e6dcf0 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #1e293b;
+  line-height: 1.6;
+}
+
+.container{max-width:1200px;margin:auto;padding:0 1.5rem}
+
+/* ===== HEADER ===== */
+header{
+  position:sticky;top:0;z-index:99;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,0.2);
+  box-shadow: var(--shadow-md);
+}
+.header-wrap{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1rem 0;
+}
+.logo-box{display:flex;align-items:center;gap:1.5rem}
+.logo{
+  width:60px;height:60px;border-radius:20px;
+  background:var(--gradient-1);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:1.5rem;box-shadow: var(--shadow-lg);
+  animation: float 3s ease-in-out infinite;
+}
+.brand-info h1{
+  font-size:1.75rem;font-weight:800;
+  background:var(--gradient-1);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;margin:0;
+}
+.brand-info p{color:var(--text-secondary);margin:0;font-size:.9rem}
+nav{display:flex;gap:1.5rem;align-items:center}
+nav a{text-decoration:none;color:var(--text-primary);font-weight:600;position:relative}
+nav a::after{
+  content:"";position:absolute;left:0;bottom:-4px;
+  width:0;height:2px;background:var(--gradient-1);
+  transition:var(--transition)
+}
+nav a:hover::after{width:100%}
+nav a.active::after{width:100%}
+.login-btn{
+  padding:.75rem 1.5rem;border-radius:16px;
+  background:var(--gradient-1);
+  color:#fff !important;font-size:1rem;
+  box-shadow: var(--shadow-md);font-weight:700;
+  display:inline-flex;align-items:center;gap:.5rem;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.login-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* ===== CONTROLS ===== */
+.controls{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  margin:2rem 0
+}
+.search-box{
+  flex:1;display:flex;background:#fff;border-radius:14px;
+  overflow:hidden;box-shadow:var(--shadow-sm);
+  min-width: 200px;
+}
+.search-box input{flex:1;border:none;padding:.9rem 1rem;outline:none}
+.search-box button{
+  border:none;background:var(--gradient-1);
+  color:#fff;padding:0 1.2rem;cursor:pointer;
+  transition: var(--transition);
+}
+.search-box button:hover{
+  opacity: 0.9;
+}
+select{
+  padding:.9rem 1rem;border-radius:14px;border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);cursor:pointer;background:#fff
+}
+
+/* ===== SUMMARY ===== */
+.summary{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.5rem;margin-bottom:2.5rem
+}
+.card{
+  background:rgba(255,255,255,0.9);
+  backdrop-filter:blur(10px);
+  border-radius:20px;padding:2rem;
+  box-shadow:var(--shadow-lg);
+  border:1px solid rgba(255,255,255,0.2);
+  transition:var(--transition)
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(0,0,0,.15)}
+.card span{color:var(--text-secondary);font-size:.85rem}
+.card h3{font-size:2.2rem;margin-top:.5rem;font-family:'JetBrains Mono',monospace}
+
+/* ===== MEMBER ACTIONS ===== */
+.member-actions{
+  background:rgba(255,255,255,0.9);
+  backdrop-filter:blur(10px);
+  border-radius:20px;padding:2rem;
+  box-shadow:var(--shadow-lg);
+  border:1px solid rgba(255,255,255,0.2);
+  margin-bottom:2rem
+}
+.member-actions h3{margin:0 0 1.5rem 0;font-size:1.25rem;font-weight:700;color:var(--text-primary)}
+.btn{
+  padding:.75rem 1.5rem;border-radius:12px;
+  background:var(--gradient-1);color:#fff;
+  border:none;cursor:pointer;font-weight:600;
+  transition:var(--transition);display:inline-flex;
+  align-items:center;gap:.5rem;font-size: 1rem;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(102,126,234,0.4)}
+.btn-secondary{
+  padding:.75rem 1.5rem;border-radius:12px;
+  background:#fff;color:var(--text-primary);
+  border:2px solid var(--border);cursor:pointer;
+  font-weight:600;transition:var(--transition);
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size: 1rem;
+}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+
+/* ===== TABLE ===== */
+.table-wrap{
+  background:#fff;border-radius:20px;
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;border:1px solid rgba(255,255,255,0.2)
+}
+table{width:100%;border-collapse:collapse}
+thead{background:#f8fafc}
+th{
+  padding:1.25rem;text-align:left;font-size:.85rem;
+  font-weight:700;color:var(--text-primary);
+  border-bottom:2px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+td{
+  padding:1.25rem;text-align:left;font-size:.95rem;
+  color:var(--text-secondary);border-bottom:1px solid var(--border)
+}
+tbody tr:hover{
+  background: var(--bg-secondary);
+  transform:translateX(2px)
+}
+.badge{
+  padding:.5rem 1rem;border-radius:999px;
+  font-size:.875rem;font-weight:600;display:inline-block
+}
+.badge-success{background:rgba(16,185,129,0.1);color:#059669}
+.badge-warning{background:rgba(245,158,11,0.1);color:#d97706}
+.badge-info{background:rgba(59,130,246,0.1);color:#2563eb}
+.badge.unpaid{background:rgba(239,68,68,0.1);color:#dc2626}
+.text-success{color:#059669}
+.text-danger{color:#dc2626}
+
+.btn-sm {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.btn-sm.btn-warning {
+  background: var(--gradient-3);
+  color: white;
+}
+
+.btn-sm.btn-danger {
+  background: var(--gradient-4);
+  color: white;
+}
+
+.btn-sm:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: var(--shadow-lg);
+  animation: modalSlideIn 0.3s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  font-size: 1rem;
+  transition: var(--transition);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes float{
+  0%,100%{transform:translateY(0px)}
+  50%{transform:translateY(-10px)}
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header-wrap{
+    flex-direction: column;
+    gap: 1rem;
+  }
+  nav{
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .controls{
+    flex-direction: column;
+  }
+  .summary{
+    grid-template-columns: 1fr;
+  }
+  table {
+    font-size: 0.85rem;
+  }
+  th, td {
+    padding: 0.75rem;
+  }
+}
+</style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-wrap">
+            <div class="logo-box">
+                <div class="logo"><i class="fas fa-coins"></i></div>
+                <div class="brand-info">
+                    <h1>BEM FT</h1>
+                    <p>Dashboard Admin</p>
+                </div>
+            </div>
+            <nav>
+                <a href="index.html">Beranda</a>
+                <a href="login.html" class="login-btn" onclick="logout(); return false;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="padding: 2rem 0;">
+        <div class="container">
+            <!-- Member Stats -->
+            <div class="card">
+                <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-users" style="color: var(--primary);"></i>
+                    Statistik Kas Anggota
+                </h3>
+                <div class="summary">
+                    <div class="card">
+                        <span>Total Anggota</span>
+                        <h3 id="total-members">0</h3>
+                    </div>
+                    <div class="card">
+                        <span>Sudah Bayar</span>
+                        <h3 class="text-success" id="paid-members">0</h3>
+                    </div>
+                    <div class="card">
+                        <span>Belum Bayar</span>
+                        <h3 style="color:#fbbf24" id="unpaid-members">0</h3>
+                    </div>
+                    <div class="card">
+                        <span>Total Terkumpul</span>
+                        <h3 id="total-collected">Rp 0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Member Actions -->
+            <div class="member-actions">
+                <h3>Manajemen Kas Anggota</h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn" onclick="openMemberModal('add')">
+                        <i class="fas fa-user-plus"></i> Tambah Anggota
+                    </button>
+                    <button class="btn-secondary" onclick="exportMembersToExcel()">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Member Table -->
+            <div class="table-wrap">
+                <div style="padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <h2 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Daftar Anggota</h2>
+                        <div class="controls" style="margin: 0;">
+                            <div class="search-box">
+                                <input type="text" id="member-search" placeholder="Cari anggota...">
+                                <button onclick="filterMembers()"><i class="fas fa-search"></i></button>
+                            </div>
+                            <select id="payment-filter" onchange="filterMembers()">
+                                <option value="all">Semua Status</option>
+                                <option value="paid">Sudah Bayar</option>
+                                <option value="unpaid">Belum Bayar</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>NIM</th>
+                            <th>Prodi</th>
+                            <th>Jumlah</th>
+                            <th>Status</th>
+                            <th>Tgl Bayar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="member-table-body">
+                        <tr>
+                            <td colspan="8" style="text-align:center;padding:2rem;color:#64748b">
+                                <i class="fas fa-inbox" style="font-size:2rem;margin-bottom:1rem;opacity:0.3;display:block"></i>
+                                Tidak ada data ditemukan
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Member Modal -->
+    <div id="member-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 id="member-modal-title" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Tambah Anggota</h3>
+                <button class="btn-secondary" onclick="closeMemberModal()" style="padding: 0.5rem; border-radius: 8px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="member-form" onsubmit="saveMember(event)">
+                <input type="hidden" id="member-id">
+                
+                <div class="form-group">
+                    <label for="member-nim">NIM</label>
+                    <input type="text" id="member-nim" required placeholder="Masukkan NIM anggota"> 
+                </div>
+                
+                <div class="form-group">
+                    <label for="member-name">Nama Lengkap</label>
+                    <input type="text" id="member-name" required placeholder="Masukkan nama lengkap anggota">   
+                </div>
+                
+                <div class="form-group">    
+                    <label for="member-prodi">Program Studi</label>
+                    <select id="member-prodi" required>
+                        <option value="">-- Pilih Prodi --</option>
+                        <option value="Teknik Informatika">Teknik Informatika</option>
+                        <option value="Sistem Informasi">Sistem Informasi</option>
+                        <option value="Teknik Elektro">Teknik Elektro</option>
+                        <option value="Teknik Mesin">Teknik Mesin</option>
+                        <option value="Teknik Industri">Teknik Industri</option>
+                    </select>   
+                </div>
+                
+                <div class="form-group">
+                    <label for="member-amount">Jumlah Kas (Rp)</label>
+                    <input type="number" id="member-amount" required placeholder="Masukkan jumlah kas" min="0"> 
+                </div>
+                
+                <div class="form-group">    
+                    <label for="member-status">Status Pembayaran</label>
+                    <select id="member-status" required onchange="togglePaymentDate()">
+                        <option value="unpaid">Belum Bayar</option>
+                        <option value="paid">Sudah Bayar</option>
+                    </select>   
+                </div>
+                
+                <div class="form-group" id="payment-date-group">
+                    <label for="member-payment-date">Tanggal Bayar</label>
+                    <input type="date" id="member-payment-date">       
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn-secondary" onclick="closeMemberModal()">Batal</button>
+                    <button type="submit" class="btn">Simpan</button>
+                </div>
+            </form> 
+        </div>
+    </div>
+
+    <!-- Delete Member Modal -->
+    <div id="delete-member-modal" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 400px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Hapus Anggota</h3>
+                <button class="btn-secondary" onclick="closeDeleteMemberModal()" style="padding: 0.5rem; border-radius: 8px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <p style="margin-bottom: 2rem; color: var(--text-secondary);">Apakah Anda yakin ingin menghapus data anggota ini? Tindakan ini tidak dapat dibatalkan.</p>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                <button type="button" class="btn-secondary" onclick="closeDeleteMemberModal()">Batal</button>
+                <button type="button" class="btn" onclick="confirmDeleteMember()" style="background: var(--danger);">Hapus</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
